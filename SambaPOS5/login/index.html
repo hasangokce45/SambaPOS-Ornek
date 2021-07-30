@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6" > <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7" > <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8" > <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="ie9" > <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>GraphQL Login</title>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+
+  <div id="title">Login</div>
+  
+  <form id="target" action="index.html">
+	<input type="text" id="user" placeholder="User Name">
+	<input type="text" id="password" placeholder="Password">
+	<input type="submit" value="Go">
+  </form>
+
+  <script type="text/javascript">
+	$('#title').html('GraphQL Login');
+
+	$( "#target" ).submit(function( event ) {
+		var name = $("#user").val();
+		var pass = $("#password").val();
+		$.ajax({
+			'type': 'POST',
+			'url': window.location.protocol+'//'+window.location.host + '/Token',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			data: $.param({ grant_type: 'password', username: name, password: pass, client_id: 'graphiql' })
+		 }).done(function(response) {
+		   console.log('AUTH', response);
+		   localStorage['access_token'] = response.access_token;
+		   localStorage['refresh_token'] = response.refresh_token;
+		   //accessToken = response.access_token
+		}).fail(function(){
+			alert('try again');
+			//window.location.href = window.location.href;
+		});
+		event.preventDefault();
+	});
+  </script>
+ 
+</body>
+</html>
